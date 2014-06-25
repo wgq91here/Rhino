@@ -1,3 +1,5 @@
+require 'thor'
+
 module Rhino
   module Cli
     module Adapter
@@ -12,20 +14,20 @@ module Rhino
           options.symbolize_keys!
           if File.exist?(options[:pid])
             pid = File.read(options[:pid]).to_i
-            print "=> Sending INT to process with pid #{pid} wait "
+            say "=> Sending INT to process with pid #{pid} wait "
             Process.kill(2, pid) rescue nil
           else
-            puts "=> #{options[:pid]} not found!"
+            say "=> #{options[:pid]} not found!"
           end
         end
 
         # Build project by YAML
         def build(options)
           options.symbolize_keys!
-          include Rhino::Generators::Build
+          #include Rhino::Generators::Build
           #Rhino.build!(options)
         end
-      end
+        end
     end
   end
 end

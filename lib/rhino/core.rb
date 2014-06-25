@@ -1,15 +1,15 @@
 #require 'scorched'
+#require 'pp'
 require 'yaml'
-require 'pp'
 
-Rhino_ROOT = ENV["Rhino_ROOT"] ||= File.dirname(Rhino.first_caller) unless defined?(Rhino_ROOT)
+
+Rhino_ROOT = ENV['Rhino_ROOT'] ||= File.dirname(Rhino.first_caller) unless defined?(Rhino_ROOT)
 
 module Rhino
 	
 	def self.load_apps(appName)
 		yamlFile = "apps/#{appName}/#{appName}.yaml"
-	  yaml = YAML.load(File.open(yamlFile))
-	  pp yaml
+	  YAML.load(File.open(yamlFile))
   end
 
   def self.list_apps
@@ -17,7 +17,7 @@ module Rhino
   end
 
   def self.reload!
-  	@Apps = Dir.glob(File.join("apps/*",""))
+  	@Apps = Dir.glob(File.join('apps/*',''))
   end
 
   class << self

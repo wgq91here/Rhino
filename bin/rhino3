@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' unless defined?(Gem)
+require 'bundler/setup' if %w(Gemfile .components).all? { |f| File.exist?(f) }
+
+rhino_cli_path = File.expand_path('../../r3', __FILE__)
+
+$:.unshift(rhino_cli_path) if File.directory?(rhino_cli_path) && !$:.include?(rhino_cli_path)
+
+require 'version'
+require 'build'
+
+Rhino::Build::Cli.start(ARGV)
