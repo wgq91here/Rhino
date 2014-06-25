@@ -1,6 +1,6 @@
 require 'rbconfig'
 
-module Rhion
+module Rhino
   ##
   # This method return the correct location of padrino bin or
   # exec it using Kernel#system with the given args.
@@ -14,8 +14,8 @@ module Rhion
   #   Padrino.bin('start', '-e production')
   #
   def self.bin(*args)
-    @_rhion_bin ||= [self.ruby_command, File.expand_path("../../bin/rhion", __FILE__)]
-    args.empty? ? @_rhion_bin : system(args.unshift(@_rhion_bin).join(" "))
+    @_rhion_bin ||= [self.ruby_command, File.expand_path("../../bin/rhino", __FILE__)]
+    args.empty? ? @_rhino_bin : system(args.unshift(@_rhino_bin).join(" "))
   end
 
   ##

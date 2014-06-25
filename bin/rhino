@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' unless defined?(Gem)
+require 'bundler/setup' if %w(Gemfile .components).all? { |f| File.exist?(f) }
+
+rhino_core_path = File.expand_path('../../lib', __FILE__)
+$:.unshift(rhino_core_path) if File.directory?(rhino_core_path) && !$:.include?(rhino_core_path)
+
+require 'rhino/cli/base'
+require 'rhino.rb'
+Rhino::Cli::Base.start(ARGV)

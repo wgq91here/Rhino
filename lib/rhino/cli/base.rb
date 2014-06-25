@@ -1,6 +1,6 @@
 require 'thor'
 
-module Rhion
+module Rhino
   module Cli
 
     # noinspection ALL
@@ -8,10 +8,10 @@ module Rhion
       include Thor::Actions
 
       class_option :chdir, :type => :string, :aliases => "-c", :desc => "Change to dir before starting."
-      class_option :environment, :type => :string, :aliases => "-e", :required => true, :default => :development, :desc => "Rhion Environment."
+      class_option :environment, :type => :string, :aliases => "-e", :required => true, :default => :development, :desc => "Rhino Environment."
       class_option :help, :type => :boolean, :desc => "Show help usage"
 
-      desc "start", "Starts the Rhion application (alternatively use 's')."
+      desc "start", "Starts the Rhino application (alternatively use 's')."
       map "s" => :start
       method_option :server, :type => :string, :aliases => "-a", :desc => "Rack Handler (default: autodetect)"
       method_option :host, :type => :string, :aliases => "-h", :required => true, :default => '127.0.0.1', :desc => "Bind to HOST address."
@@ -30,18 +30,18 @@ module Rhion
         if options[:server_options]
           puts server_options(options)
         else
-          Rhion::Cli::Adapter.start(options)
+          Rhino::Cli::Adapter.start(options)
         end
       end
 
-      desc "stop", "Stops the Rhion application (alternatively use 'st')."
+      desc "stop", "Stops the Rhino application (alternatively use 'st')."
       map "st" => :stop
       method_option :pid, :type => :string, :aliases => "-p", :desc => "File to store pid", :default => 'tmp/pids/server.pid'
 
       def stop
         prepare :stop
         require File.expand_path("../adapter", __FILE__)
-        Rhion::Cli::Adapter.stop(options)
+        Rhino::Cli::Adapter.stop(options)
       end
 
       desc "rake", "Execute rake tasks."
@@ -65,7 +65,7 @@ module Rhion
         Rake.application.top_level
       end
 
-      desc "console", "Boots up the Rhion application irb console (alternatively use 'c')."
+      desc "console", "Boots up the Rhino application irb console (alternatively use 'c')."
       map "c" => :console
 
       def console(*args)
@@ -77,7 +77,7 @@ module Rhion
         require File.expand_path('config/boot.rb')
         #require 'pry'
         require File.expand_path('../console', __FILE__)
-        puts "=> Loading {Rhion.env} console (Rhion v.#{Rhion.version})"
+        puts "=> Loading {Rhino.env} console (Rhino v.#{Rhino.version})"
         IRB.start
         #Pry.start
       end
@@ -91,20 +91,20 @@ module Rhion
         prepare :build
         require File.expand_path("../../../version/version", __FILE__)
         require File.expand_path("../adapter", __FILE__)
-        puts "=> Build Project by YAML (Rhion v. #{Rhion.version})"
+        puts "=> Build Project by YAML (Rhino v. #{Rhino.version})"
 
-        Rhion::Cli::Adapter.build(options)
+        Rhino::Cli::Adapter.build(options)
       end
 
-      desc "version", "Show current Rhion version."
+      desc "version", "Show current Rhino version."
       map ["-v", "--version"] => :version
 
       def version
         require File.expand_path("../../../version/version", __FILE__)
-        puts "Rhion v. #{Rhion.version}"
+        puts "Rhino v. #{Rhino.version}"
       end
 
-      desc "runner", "Run a piece of code in the Rhion application environment (alternatively use 'run' or 'r')."
+      desc "runner", "Run a piece of code in the Rhino application environment (alternatively use 'run' or 'r')."
       map ["run", "r"] => :runner
 
       def runner(*args)
@@ -163,7 +163,7 @@ module Rhion
       protected
 
       def self.banner(task=nil, *args)
-        "Rhion #{task.name}"
+        "Rhino #{task.name}"
       end
 
       def chdir(dir)
@@ -171,9 +171,9 @@ module Rhion
         begin
           Dir.chdir(dir.to_s)
         rescue Errno::ENOENT
-          puts "=> Specified Rhion root '#{dir}' does not appear to exist!"
+          puts "=> Specified Rhino root '#{dir}' does not appear to exist!"
         rescue Errno::EACCES
-          puts "=> Specified Rhion root '#{dir}' cannot be accessed by the current user!"
+          puts "=> Specified Rhino root '#{dir}' cannot be accessed by the current user!"
         end
       end
 

@@ -3,7 +3,7 @@
 require File.expand_path("../lib/version/version.rb", __FILE__)
 
 Gem::Specification.new do |s|
-  s.name        = 'rhion'
+  s.name        = 'rhino'
   s.version     = '0.0.1'
   s.date        = Time.now.strftime("%Y-%m-%d")
   s.summary     = "Generate web ruby app by yaml"
@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Fred Wu"]
   s.email       = 'wgq91here@gmail.com'
   s.files       = ["lib/Rhion.rb"]
-  s.homepage    = 'http://rhion.91here.com'
+  s.homepage    = 'http://rhino.91here.com'
   s.license     = 'Apache 2.0'
 
   s.files         = Dir.glob(`git ls-files`.split("\n") - %w[.gitignore])

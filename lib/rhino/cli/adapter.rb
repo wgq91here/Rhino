@@ -1,13 +1,13 @@
-module Rhion
+module Rhino
   module Cli
     module Adapter
       class << self
         # Start for the given options a rackup handler
         def start(options)
-          Rhion.run!(options.symbolize_keys)
+          Rhino.run!(options.symbolize_keys)
         end
 
-        # Method that stop (if exist) a running Rhion.application
+        # Method that stop (if exist) a running Rhino.application
         def stop(options)
           options.symbolize_keys!
           if File.exist?(options[:pid])
@@ -22,7 +22,7 @@ module Rhion
         # Build project by YAML
         def build(options)
           puts options
-          Rhion.build!(options.symbolize_keys)
+          Rhino.build!(options.symbolize_keys)
         end
       end
     end

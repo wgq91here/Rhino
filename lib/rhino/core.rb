@@ -2,9 +2,9 @@
 require 'yaml'
 require 'pp'
 
-RHION_ROOT = ENV["RHION_ROOT"] ||= File.dirname(Rhion.first_caller) unless defined?(RHION_ROOT)
+Rhino_ROOT = ENV["Rhino_ROOT"] ||= File.dirname(Rhino.first_caller) unless defined?(Rhino_ROOT)
 
-module Rhion
+module Rhino
 	
 	def self.load_apps(appName)
 		yamlFile = "apps/#{appName}/#{appName}.yaml"

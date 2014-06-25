@@ -1,7 +1,7 @@
-require 'rhion/caller'
-require 'rhion/core'
+require 'rhino/caller'
+require 'rhino/core'
 
-module Rhion
+module Rhino
   class << self
     def build!(options)
     	load_apps("bug")

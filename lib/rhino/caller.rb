@@ -1,10 +1,10 @@
-module Rhion
+module Rhino
 
-  # List of callers in a Rhion application that should be ignored as part of a stack trace.
-  RHION_IGNORE_CALLERS = [
-    %r{lib/Rhion-.*$},
-    %r{/Rhion-.*/(lib|bin)},
-    %r{/bin/Rhion$},
+  # List of callers in a Rhino application that should be ignored as part of a stack trace.
+  Rhino_IGNORE_CALLERS = [
+    %r{lib/Rhino-.*$},
+    %r{/Rhino-.*/(lib|bin)},
+    %r{/bin/Rhino$},
     %r{/sinatra(/(base|main|show_?exceptions))?\.rb$},
     %r{lib/tilt.*\.rb$},
     %r{lib/rack.*\.rb$},
@@ -20,12 +20,12 @@ module Rhion
     %r{custom_require\.rb$},
     %r{active_support},
     %r{/thor}
-  ] unless defined?(RHION_IGNORE_CALLERS)
+  ] unless defined?(Rhino_IGNORE_CALLERS)
 
   ##
   # Add rubinius (and hopefully other VM implementations) ignore patterns ...
   #
-  RHION_IGNORE_CALLERS.concat(RUBY_IGNORE_CALLERS) if defined?(RUBY_IGNORE_CALLERS)
+  Rhino_IGNORE_CALLERS.concat(RUBY_IGNORE_CALLERS) if defined?(RUBY_IGNORE_CALLERS)
 
   private
   ##
@@ -48,7 +48,7 @@ module Rhion
   def self.caller_files
     caller(1).
       map    { |line| line.split(/:(?=\d|in )/)[0,2] }.
-      reject { |file,line| RHION_IGNORE_CALLERS.any? { |pattern| file =~ pattern } }.
+      reject { |file,line| Rhino_IGNORE_CALLERS.any? { |pattern| file =~ pattern } }.
       map    { |file,line| file }
   end
 end
