@@ -7,5 +7,5 @@ rhino_core_path = File.expand_path('../../lib', __FILE__)
 $:.unshift(rhino_core_path) if File.directory?(rhino_core_path) && !$:.include?(rhino_core_path)
 
 require 'rhino/cli/base'
-require 'rhino.rb'
+require 'build/build'
 Rhino::Cli::Base.start(ARGV)

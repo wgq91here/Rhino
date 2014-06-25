@@ -22,7 +22,8 @@ module Rhino
         # Build project by YAML
         def build(options)
           options.symbolize_keys!
-          Rhino.build!(options)
+          include Rhino::Generators::Build
+          #Rhino.build!(options)
         end
       end
     end

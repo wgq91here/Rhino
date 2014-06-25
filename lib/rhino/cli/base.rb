@@ -74,10 +74,11 @@ module Rhino
         ARGV.clear
         require 'irb'
         require 'irb/completion'
-        require File.expand_path('config/boot.rb')
+        #require File.expand_path('config/boot.rb')
         #require 'pry'
         require File.expand_path('../console', __FILE__)
         puts "=> Loading {Rhino.env} console (Rhino v.#{Rhino.version})"
+        say "=>"
         IRB.start
         #Pry.start
       end
@@ -92,6 +93,7 @@ module Rhino
         require File.expand_path("../../../version/version", __FILE__)
         require File.expand_path("../adapter", __FILE__)
         puts "=> Build Project by YAML (Rhino v. #{Rhino.version})"
+        #build!(options)
         Rhino::Cli::Adapter.build(options)
       end
 
