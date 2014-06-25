@@ -1,0 +1,267 @@
+config:
+  application_name: Rhino
+  db:
+    dev:
+      adapter: sqlite3
+      database: default
+      dbname: default
+    production:
+      adapter: mysql
+      database:
+      dbname: blog
+
+auth:
+  type: session
+  #plugin: auth_user
+  data_model: user
+  data_field: [name,password]
+
+data:
+  # model
+  model:
+    Product:
+      type: entity
+      table: products
+      force: true
+      primary_key: 
+        pid:
+          type: integer
+          generator: AUTO
+      fields:
+        pid:
+          type: string
+          label: 产品ID编号
+        name:
+          type: string
+          label: 产品名
+          limit: 120
+      has_many:
+        bugs:
+          targetEntity: Bug
+          mappedBy: products
+
+    Bug:
+      type: entity
+      table: bugs
+      primary_key:
+        id:
+          type: integer
+          generator: AUTO
+      fields:
+        description:
+          type: text
+          label: 解释
+        created:
+          type: datetime
+          label: 创建日期
+        status:
+          type: string
+          #values: [reported,fixing,fixed]
+          label: 状态
+      belong_to:
+        reporter:
+          target_entity: User
+        engineer:
+          target_entity: User
+        products:
+          target_entity: Product
+
+    User:
+      type: entity
+      table: users
+      primary_key:
+        id:
+          type: integer
+          generator: AUTO
+      fields:
+        name:
+          type: string
+          label: 姓名
+        password:
+          type: string #Add sha1 password
+          label: 密码
+      has_many:
+        reportedBugs:
+          target_entity: Bug
+          mapped_by: reporter
+        assignedBugs:
+          target_entity: Bug
+          mapped_by: engineer
+
+  collection:
+    bugList:
+      model: Bug
+      select: [products.name, created, status]
+      condition: status in ("reported","fixing")
+    bugShow:
+      model: Bug      
+      select: [products.name, created, status, reporter.name, engineer.name]
+      condition: id = route_param.id
+    productList:
+      model: Product
+      select: [name, created, status]
+    productShow:
+      model: Product      
+      select: [name, created, status, bugs.*]
+      condition: id = route_param.id
+
+  # Items
+  items:
+    navbar:
+      Home: {label: "Home", view: index}
+      Product: {label: "Product", view: product, visible: true}
+      User: 
+        label: "Product"
+        view: user
+        condition: session['user']['name'] == 'admin'
+    product:
+      new: {label: "New Product", view: product_new, visible: true}
+      list: {label: "Product", view: product, visible: true}
+    bug:
+      new: {label: "New Bug", view: bug_new, visible: true}
+      list: {label: "Bug", view: bug, visible: true}
+
+event:
+  error:
+    BugShow:
+      template: error
+      message: Load Bug Error
+    ProductShow:
+      template: error
+      message: Load Product Error
+
+theme:
+  layout:
+    header:
+      widget: 
+        id: bootstrap.navbar #template: navbar
+        header: config.application_name
+        nav_left: data.items.navbar
+        nav_right:
+          Login:
+            label: "Login"
+            view: index
+            visible: |
+              session['userid'] == nil
+          Setting:
+            label: "Setting"
+            view: setting
+            visible: |
+              session['userid'] != nil
+          Logout:
+            label: "Logout"
+            event: action.logout
+            visible: >
+              session['userid'] != nil
+    container:
+      row:
+    footer:
+      template: view/footer.erb
+      items: {copyright: config.application_name, home_url: config.application_url}
+  widget:
+    bugList:
+      id: bootstrap.listTable
+      data: data.collection.bugList
+      fields: 
+        products.name: link_to(self.product.name, 'id=' + self.product.id)
+        created: self.created
+        status: self.status
+    bugShow:
+      id: bootstrap.showTable
+      data: data.collection.bugShow route_param.id
+    productList:
+      id: bootstrap.listTable
+      data: data.collection.productList
+      fields: 
+        products.name: link_to(self.product.name, view.product_show(id => self.product.id))
+        created: self.created
+        status: self.status
+        _buttons:
+          - link_to("delete", event.product_delete(id => self.product.id))
+          - link_to("update", view.product_update(id => self.product.id))
+    productShow:
+      id: bootstrap.showTable
+      data: data.collection.productShow route_param.id
+  view:
+    index:
+      auth: disable
+      layout: bootstrap
+      html:
+        container:
+          row.col-md-12:
+            widget: bugList
+    product:
+      auth: enable
+      layout: bootstrap
+      javascript:
+      css:
+      html:
+        container:
+          row:
+            col-md-9:
+              widget: productList
+            col-md-3:
+              widget: bootstrap.nav-stacked
+              data: data.items.product
+    product_show:
+      route_param:
+        id: '%d'
+      auth: enable
+      layout: bootstrap
+      javascript:
+      css:
+      html:
+        container:
+          row:
+            col-md-9:
+              widget: productShow id
+            col-md-3:
+              widget: bootstrap.nav-stacked
+              data: data.items.product
+      error:
+        event: action.errorProductShow
+    user:
+      auth: enable
+      layout: bootstrap
+      javascript:
+      css:
+      html:
+        container:
+          row:
+            col-md-9:
+              widget: bootstrap.table
+              data: data.items.product
+            col-md-3:
+              widget: bootstrap.nav-stacked
+              data: data.items.product
+    bug:
+      auth: enable
+      layout: bootstrap
+      javascript:
+      css:
+      html:
+        container:
+          row:
+            col-md-9:
+              widget: bootstrap.table
+              data: data.items.bug
+            col-md-3:
+              widget: bootstrap.nav-stacked
+              data: data.items.bug
+    bug_show:
+      route_param:
+        id: '%d'
+      auth: enable
+      layout: bootstrap
+      javascript:
+      css:
+      html:
+        container:
+          row:
+            col-md-9:
+              widget: bugShow id
+            col-md-3:
+              widget: bootstrap.nav-stacked
+              data: data.items.bug
+      error:
+        event: action.errorBugShow
