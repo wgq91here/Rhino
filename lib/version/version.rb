@@ -1,9 +1,9 @@
-module Rhion
+module Rhino
   # The version constant for the current version of Rhion.
   VERSION = '0.0.1' unless defined?(Rhino::VERSION)
 
   #
-  # The current Rhion version.
+  # The current Rhino version.
   #
   # @return [String]
   #   The version number.
@@ -11,4 +11,4 @@ module Rhion
   def self.version
     VERSION
   end
-end # Rhion
+end

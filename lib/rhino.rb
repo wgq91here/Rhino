@@ -4,8 +4,8 @@ require 'rhino/core'
 module Rhino
   class << self
     def build!(options)
-    	load_apps("bug")
-      puts 'im build!', options
+      puts 'im build!', options["yaml"]
+    	load_apps(options["yaml"])
     end
   end
 end

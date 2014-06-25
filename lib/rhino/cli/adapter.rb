@@ -21,8 +21,8 @@ module Rhino
 
         # Build project by YAML
         def build(options)
-          puts options
-          Rhino.build!(options.symbolize_keys)
+          options.symbolize_keys!
+          Rhino.build!(options)
         end
       end
     end

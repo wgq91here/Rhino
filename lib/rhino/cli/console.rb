@@ -1,6 +1,6 @@
 # Reloads classes
 def reload!
-  Rhion.reload!
+  Rhino.reload!
 end
 
 # Show applications
@@ -10,7 +10,7 @@ def applications
     puts " * %-10s mapped to      %s" % [app.name, app.uri_root]
   end
   puts
-  Rhion.mounted_apps.map { |app| "#{app.name} => #{app.uri_root}" }
+  Rhino.mounted_apps.map { |app| "#{app.name} => #{app.uri_root}" }
 end
 
 # Load apps

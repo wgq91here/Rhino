@@ -83,16 +83,15 @@ module Rhino
       end
 
       desc "build", "Build project by YAML."
-      map ["-b", "--import"] => :import
+      map "-b" => :build
 
-      method_option :yaml, :type => :string, :aliases => "-y", :required => true, :default => :app
+      method_option :yaml, :type => :string, :required => true, :default => :app, :desc => "Build by Yaml file."
 
       def build(*args)
         prepare :build
         require File.expand_path("../../../version/version", __FILE__)
         require File.expand_path("../adapter", __FILE__)
         puts "=> Build Project by YAML (Rhino v. #{Rhino.version})"
-
         Rhino::Cli::Adapter.build(options)
       end
 

@@ -3,12 +3,12 @@ require 'rake'
 require 'rake/dsl_definition'
 require 'thor'
 require 'securerandom' unless defined?(SecureRandom)
-#require 'Rhion-gen'
+#require 'Rhino-gen'
 
-module RhionTasks
+module RhinoTasks
   def self.init(init=false)
     $LOAD_PATH.unshift(File.expand_path("lib"))
-    Rhion::Tasks.files.flatten.uniq.each { |rakefile| Rake.application.add_import(rakefile) rescue puts "<= Failed load #{ext}" }
+    Rhino::Tasks.files.flatten.uniq.each { |rakefile| Rake.application.add_import(rakefile) rescue puts "<= Failed load #{ext}" }
     load(File.expand_path('../rake_tasks.rb', __FILE__))
     Rake.application.load_imports
   end
@@ -22,13 +22,13 @@ module RhionTasks
   end
 
   def self.load?(task, constant_present)
-    if constant_present && !RhionTasks.tasks.include?(task)
+    if constant_present && !RhinoTasks.tasks.include?(task)
       warn <<-WARNING.undent
         Loading #{task} tasks automatically.
         This functionality will be disabled in future versions. Please put
 
-          RhionTasks.use(#{task.inspect})
-          RhionTasks.init
+          RhinoTasks.use(#{task.inspect})
+          RhinoTasks.init
 
         and remove
 
@@ -38,7 +38,7 @@ module RhionTasks
       WARNING
     end
 
-    constant_present || RhionTasks.tasks.include?(task)
+    constant_present || RhinoTasks.tasks.include?(task)
   end
 end
 
