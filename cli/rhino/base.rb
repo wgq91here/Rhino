@@ -25,7 +25,7 @@ module Rhino
         puts $:.to_s
         require 'build/build'
         say "=> Build Project by YAML (Rhino v.#{Rhino.version})"
-        require Rhino::Generators::Build
+        #require Rhino::Generators::Build
         start(options)
         #build!(options)
 

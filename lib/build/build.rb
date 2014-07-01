@@ -6,7 +6,7 @@ module Rhino
     class Build
         def self.start(options)
           puts 'im build!', options["yaml"]
-          load_apps(options["yaml"])
+          #load_apps(options["yaml"])
         end
     end
   end
