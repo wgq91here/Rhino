@@ -106,7 +106,7 @@ data:
       condition: id = route_param.id
 
   # Items
-  items:
+  item:
     navbar:
       Home: {label: "Home", view: index}
       Product: {label: "Product", view: product, visible: true}
@@ -131,137 +131,138 @@ event:
       message: Load Product Error
 
 theme:
-  layout:
-    header:
-      widget: 
-        id: bootstrap.navbar #template: navbar
-        header: config.application_name
-        nav_left: data.items.navbar
-        nav_right:
-          Login:
-            label: "Login"
-            view: index
-            visible: |
-              session['userid'] == nil
-          Setting:
-            label: "Setting"
-            view: setting
-            visible: |
-              session['userid'] != nil
-          Logout:
-            label: "Logout"
-            event: action.logout
-            visible: >
-              session['userid'] != nil
-    container:
-      row:
-    footer:
-      template: view/footer.erb
-      items: {copyright: config.application_name, home_url: config.application_url}
-  widget:
-    bugList:
-      id: bootstrap.listTable
-      data: data.collection.bugList
-      fields: 
-        products.name: link_to(self.product.name, 'id=' + self.product.id)
-        created: self.created
-        status: self.status
-    bugShow:
-      id: bootstrap.showTable
-      data: data.collection.bugShow route_param.id
-    productList:
-      id: bootstrap.listTable
-      data: data.collection.productList
-      fields: 
-        products.name: link_to(self.product.name, view.product_show(id => self.product.id))
-        created: self.created
-        status: self.status
-        _buttons:
-          - link_to("delete", event.product_delete(id => self.product.id))
-          - link_to("update", view.product_update(id => self.product.id))
-    productShow:
-      id: bootstrap.showTable
-      data: data.collection.productShow route_param.id
-  view:
-    index:
-      auth: disable
-      layout: bootstrap
-      html:
-        container:
-          row.col-md-12:
-            widget: bugList
-    product:
-      auth: enable
-      layout: bootstrap
-      javascript:
-      css:
-      html:
-        container:
-          row:
-            col-md-9:
-              widget: productList
-            col-md-3:
-              widget: bootstrap.nav-stacked
-              data: data.items.product
-    product_show:
-      route_param:
-        id: '%d'
-      auth: enable
-      layout: bootstrap
-      javascript:
-      css:
-      html:
-        container:
-          row:
-            col-md-9:
-              widget: productShow id
-            col-md-3:
-              widget: bootstrap.nav-stacked
-              data: data.items.product
-      error:
-        event: action.errorProductShow
-    user:
-      auth: enable
-      layout: bootstrap
-      javascript:
-      css:
-      html:
-        container:
-          row:
-            col-md-9:
-              widget: bootstrap.table
-              data: data.items.product
-            col-md-3:
-              widget: bootstrap.nav-stacked
-              data: data.items.product
-    bug:
-      auth: enable
-      layout: bootstrap
-      javascript:
-      css:
-      html:
-        container:
-          row:
-            col-md-9:
-              widget: bootstrap.table
-              data: data.items.bug
-            col-md-3:
-              widget: bootstrap.nav-stacked
-              data: data.items.bug
-    bug_show:
-      route_param:
-        id: '%d'
-      auth: enable
-      layout: bootstrap
-      javascript:
-      css:
-      html:
-        container:
-          row:
-            col-md-9:
-              widget: bugShow id
-            col-md-3:
-              widget: bootstrap.nav-stacked
-              data: data.items.bug
-      error:
-        event: action.errorBugShow
+  bootstrap:
+    layout:
+      header:
+        widget:
+          id: bootstrap.navbar #template: navbar
+          header: config.application_name
+          nav_left: data.items.navbar
+          nav_right:
+            Login:
+              label: "Login"
+              view: index
+              visible: |
+                session['userid'] == nil
+            Setting:
+              label: "Setting"
+              view: setting
+              visible: |
+                session['userid'] != nil
+            Logout:
+              label: "Logout"
+              event: action.logout
+              visible: >
+                session['userid'] != nil
+      container:
+        row:
+      footer:
+        template: view/footer.erb
+        items: {copyright: config.application_name, home_url: config.application_url}
+    widget:
+      bugList:
+        id: bootstrap.listTable
+        data: data.collection.bugList
+        fields:
+          products.name: link_to(self.product.name, 'id=' + self.product.id)
+          created: self.created
+          status: self.status
+      bugShow:
+        id: bootstrap.showTable
+        data: data.collection.bugShow route_param.id
+      productList:
+        id: bootstrap.listTable
+        data: data.collection.productList
+        fields:
+          products.name: link_to(self.product.name, view.product_show(id => self.product.id))
+          created: self.created
+          status: self.status
+          _buttons:
+            - link_to("delete", event.product_delete(id => self.product.id))
+            - link_to("update", view.product_update(id => self.product.id))
+      productShow:
+        id: bootstrap.showTable
+        data: data.collection.productShow route_param.id
+    view:
+      index:
+        auth: disable
+        layout: bootstrap
+        html:
+          container:
+            row.col-md-12:
+              widget: bugList
+      product:
+        auth: enable
+        layout: bootstrap
+        javascript:
+        css:
+        html:
+          container:
+            row:
+              col-md-9:
+                widget: productList
+              col-md-3:
+                widget: bootstrap.nav-stacked
+                data: data.items.product
+      product_show:
+        route_param:
+          id: '%d'
+        auth: enable
+        layout: bootstrap
+        javascript:
+        css:
+        html:
+          container:
+            row:
+              col-md-9:
+                widget: productShow id
+              col-md-3:
+                widget: bootstrap.nav-stacked
+                data: data.items.product
+        error:
+          event: action.errorProductShow
+      user:
+        auth: enable
+        layout: bootstrap
+        javascript:
+        css:
+        html:
+          container:
+            row:
+              col-md-9:
+                widget: bootstrap.table
+                data: data.items.product
+              col-md-3:
+                widget: bootstrap.nav-stacked
+                data: data.items.product
+      bug:
+        auth: enable
+        layout: bootstrap
+        javascript:
+        css:
+        html:
+          container:
+            row:
+              col-md-9:
+                widget: bootstrap.table
+                data: data.items.bug
+              col-md-3:
+                widget: bootstrap.nav-stacked
+                data: data.items.bug
+      bug_show:
+        route_param:
+          id: '%d'
+        auth: enable
+        layout: bootstrap
+        javascript:
+        css:
+        html:
+          container:
+            row:
+              col-md-9:
+                widget: bugShow id
+              col-md-3:
+                widget: bootstrap.nav-stacked
+                data: data.items.bug
+        error:
+          event: action.errorBugShow
