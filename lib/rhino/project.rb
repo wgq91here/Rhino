@@ -5,7 +5,7 @@ module Rhino
   module Project
     class << self
       #include Rhino::Util
-      attr_accessor :app_name,:app_name1, :components
+      attr_accessor :app_name, :app_name1, :components
 
       def register(name, option)
         @components.store(name.to_s, option)

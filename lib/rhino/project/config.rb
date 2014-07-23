@@ -1,4 +1,5 @@
 require 'rhino/project'
+require 'pp'
 
 module Rhino
   module Project
@@ -6,7 +7,7 @@ module Rhino
 
       def initialize
         puts '@app_name: ' + Rhino::Project.app_name.to_s
-        puts Rhino::Project.get_yaml
+        pp Rhino::Project.get_yaml
       end
     end
   end
