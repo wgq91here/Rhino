@@ -9,8 +9,44 @@ require 'sequel'
 
 module Rhino
   #extend Rhino::Util
-  autoload :Project, 'rhino/project'
+  #autoload :Project, 'rhino/project'
   class << self
+
+    def set(option, value = (not_set = true), ignore_setter = false, &block)
+      raise ArgumentError if block and !not_set
+      value, not_set = block, false if block
+
+      if not_set
+        raise ArgumentError unless option.respond_to?(:each)
+        option.each { |k,v| set(k, v) }
+        return self
+      end
+
+      if respond_to?("#{option}=") and not ignore_setter
+        return __send__("#{option}=", value)
+      end
+
+      setter = proc { |val| set option, val, true }
+      getter = proc { value }
+
+      case value
+        when Proc
+          getter = value
+        when Symbol, Fixnum, FalseClass, TrueClass, NilClass
+          getter = value.inspect
+        when Hash
+          setter = proc do |val|
+            val = value.merge val if Hash === val
+            set option, val, true
+          end
+      end
+
+      define_singleton("#{option}=", setter) if setter
+      define_singleton(option, getter) if getter
+      define_singleton("#{option}?", "!!#{option}") unless method_defined? "#{option}?"
+      self
+    end
+
     ##
     # Helper method for file references.
     #
@@ -22,7 +58,7 @@ module Rhino
     #
     # @example
     #   # Referencing a file in config called settings.yml
-    #   Padrino.root("config", "settings.yml")
+    #   Rhino.root("config", "settings.yml")
     #   # returns RHINO_ROOT + "/config/setting.yml"
     #
     def root(*args)
@@ -33,7 +69,7 @@ module Rhino
     # Helper method that return {RACK_ENV}.
     #
     # @return [Symbol]
-    #   The Padrino Environment.
+    #   The Rhino Environment.
     #
     def env
       @_env ||= RACK_ENV.to_s.downcase.to_sym
@@ -42,16 +78,16 @@ module Rhino
     ##
     # The resulting rack builder mapping each 'mounted' application.
     #
-    # @return [Padrino::Router]
+    # @return [Rhino::Router]
     #   The router for the application.
     #
     # @raise [ApplicationLoadError]
     #   No applications were mounted.
     #
     def application
-      warn 'WARNING! No apps are mounted. Please, mount apps in `config/apps.rb`' unless Padrino.mounted_apps.present?
-      router = Padrino::Router.new
-      Padrino.mounted_apps.each { |app| app.map_onto(router) }
+      warn 'WARNING! No apps are mounted. Please, mount apps in `config/apps.rb`' unless Rhino.mounted_apps.present?
+      router = Rhino::Router.new
+      Rhino.mounted_apps.each { |app| app.map_onto(router) }
       middleware.present? ? add_middleware(router) : router
     end
 
@@ -63,7 +99,7 @@ module Rhino
     #   The given block will be called to configure each application.
     #
     # @example
-    #   Padrino.configure_apps do
+    #   Rhino.configure_apps do
     #     enable  :sessions
     #     disable :raise_errors
     #   end
@@ -109,7 +145,7 @@ module Rhino
 
     ##
     # A Rack::Builder object that allows to add middlewares in front of all
-    # Padrino applications.
+    # Rhino applications.
     #
     # @return [Array<Array<Class, Array, Proc>>]
     #   The middleware classes.
@@ -129,7 +165,7 @@ module Rhino
     end
 
     ##
-    # Convenience method for adding a Middleware to the whole padrino app.
+    # Convenience method for adding a Middleware to the whole Rhino app.
     #
     # @param [Class] m
     #   The middleware class.
@@ -145,8 +181,8 @@ module Rhino
     end
 
     ##
-    # Registers a gem with padrino. This relieves the caller from setting up
-    # loadpaths by itself and enables Padrino to look up apps in gem folder.
+    # Registers a gem with Rhino. This relieves the caller from setting up
+    # loadpaths by itself and enables Rhino to look up apps in gem folder.
     #
     # The name given has to be the proper gem name as given in the gemspec.
     #
@@ -171,7 +207,7 @@ module Rhino
     end
 
     ##
-    # @returns [<Padrino::Module>]
+    # @returns [<Rhino::Module>]
     def modules
       @modules ||= []
     end

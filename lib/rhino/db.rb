@@ -1,5 +1,5 @@
 module Rhino
-  class Db
+  module Db
 	attr_accessor :db, :dns
 
 	def getDb

@@ -9,6 +9,7 @@ module Rhino
       include Thor::Actions
       require 'rhino/cli_project'
       require 'rhino/cli_component'
+
       class_option :root,
                    :type => :string,
                    :aliases => '-r',
@@ -49,13 +50,17 @@ module Rhino
       def init
         printVersion
         printAction '[init]'
-        Rhino.logger.info('Rhino init...')
-		r_init = Rhino::Init.new
-		r_init.setup
-		r_db = Rhino::Db.new
-		r_db.dns = r_init.init_config[:dns] 
-		r_db.create!
-		pp r_db
+        #Rhino::Init
+    		r_init = Rhino::Init.new
+    		r_init.setup
+        pp Rhino.root
+        pp RHINO_ROOT
+        pp RHINO_PATH
+        Rhino.set :assembly_init, r_init
+    		#r_db = Rhino::Db.new
+    		#r_db.dns = r_init.init_config[:dns] 
+    		#r_db.create!
+    		#pp r_db
       end
 
       #

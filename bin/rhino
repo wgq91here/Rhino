@@ -4,13 +4,13 @@
 require 'rubygems' unless defined?(Gem)
 require 'bundler/setup' if %w(Gemfile .components).all? { |f| File.exist?(f) }
 
-rhino_path = File.expand_path('../../lib', __FILE__)
+RHINO_PATH = File.expand_path('../../lib', __FILE__)
 
-$:.unshift(rhino_path) if File.directory?(rhino_path) && !$:.include?(rhino_path)
+$:.unshift(RHINO_PATH) if File.directory?(RHINO_PATH) && !$:.include?(RHINO_PATH)
 
 ENV['RACK_ENV'] = 'development'
-RACK_ENV = ENV['RACK_ENV'] ||= 'development'  unless defined?(RACK_ENV)
-RHINO_ROOT = File.dirname(__FILE__) unless defined? RHINO_ROOT
+RACK_ENV = ENV['RACK_ENV'] ||= 'development' unless defined?(RACK_ENV)
+RHINO_ROOT = File.expand_path('../..', __FILE__) unless defined? RHINO_ROOT
 
 require 'rhino'
 

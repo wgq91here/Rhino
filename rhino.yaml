@@ -1,0 +1,3 @@
+---
+:rhino_version: 0.0.1
+:dns: sqlite:///mnt/E/workspace/Rhino/rhino.db
